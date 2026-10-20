@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ฟาร์มสัตว์เลี้ยงประจำห้อง</title>
+<meta name="theme-color" content="#2B7DF0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="ฟาร์มสัตว์เลี้ยง">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="48x48" href="icons/favicon-48.png">
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png">
+<style>
+:root{--ink:#1B2559;--muted:#5B658F;--surface:#fff;--line:#D9E2FF;--primary:#2B7DF0;color-scheme:light}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{font-family:'Sarabun','Noto Sans Thai',system-ui,sans-serif;color:var(--ink);background:linear-gradient(180deg,#5BBBFF 0%,#2B7DF0 55%,#1B4FD0 100%);display:grid;place-items:center;padding:env(safe-area-inset-top) 16px env(safe-area-inset-bottom)}
+.card{width:min(100%,400px);background:var(--surface);border-radius:28px;padding:28px 22px 24px;text-align:center;box-shadow:0 24px 60px rgba(10,20,80,.35);animation:pop .4s cubic-bezier(.34,1.56,.64,1)}
+@keyframes pop{from{opacity:0;transform:translateY(20px) scale(.92)}to{opacity:1;transform:none}}
+.icon{width:116px;height:116px;border-radius:26px;display:block;margin:-62px auto 14px;box-shadow:0 12px 28px rgba(20,40,160,.35)}
+h1{font-size:22px;margin:0 0 4px}
+p{margin:0;color:var(--muted);line-height:1.55}
+.btn{display:block;width:100%;border:0;border-radius:14px;padding:13px 16px;margin-top:14px;font:inherit;font-weight:700;font-size:17px;text-decoration:none;cursor:pointer}
+.primary{background:var(--primary);color:#fff}
+.ghost{background:#EEF2FF;color:var(--primary)}
+.how{margin-top:18px;text-align:left;background:#F5F8FF;border:1px solid var(--line);border-radius:16px;padding:12px 14px;font-size:14.5px}
+.how b{display:block;margin-bottom:4px;color:var(--ink)}
+.how ol{margin:0;padding-left:20px;color:var(--muted)}
+.dots{display:flex;gap:6px;justify-content:center;margin-top:16px}
+.dots i{width:9px;height:9px;border-radius:50%;background:var(--primary);animation:b 1s ease-in-out infinite}
+.dots i:nth-child(2){animation-delay:.15s;opacity:.7}.dots i:nth-child(3){animation-delay:.3s;opacity:.5}
+@keyframes b{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-8px)}}
+.warn{background:#FFF4E5;border:1px solid #FFD8A8;border-radius:14px;padding:10px 12px;margin-top:14px;color:#8A4B00;font-size:14px;text-align:left}
+[hidden]{display:none!important}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</head>
+<body>
+<main class="card">
+  <img class="icon" src="icons/icon-192.png" width="116" height="116" alt="ไอคอนแอป">
+  <h1 id="name">ฟาร์มสัตว์เลี้ยงประจำห้อง</h1>
+  <p id="tag">ส่งงาน ทำคะแนน ฟักไข่ แล้วเลี้ยงสัตว์เลี้ยงให้โต</p>
+
+  <div id="opening" hidden><div class="dots" aria-hidden="true"><i></i><i></i><i></i></div><p style="margin-top:8px">กำลังเปิดแอป...</p></div>
+
+  <div id="menu" hidden>
+    <a class="btn primary" id="open" href="#">เปิดแอป</a>
+    <button class="btn ghost" id="install" hidden>ติดตั้งเป็นแอปบนเครื่องนี้</button>
+    <div class="how" id="how-ios" hidden><b>เพิ่มลงหน้าจอ iPhone / iPad</b><ol><li>เปิดหน้านี้ด้วย Safari</li><li>กดปุ่มแชร์ (สี่เหลี่ยมมีลูกศรขึ้น)</li><li>เลื่อนลงแล้วเลือก “เพิ่มไปยังหน้าจอโฮม”</li></ol></div>
+    <div class="how" id="how-android" hidden><b>เพิ่มลงหน้าจอ Android</b><ol><li>เปิดหน้านี้ด้วย Chrome</li><li>กดเมนู ⋮ มุมขวาบน</li><li>เลือก “ติดตั้งแอป” หรือ “เพิ่มลงในหน้าจอหลัก”</li></ol></div>
+    <div class="how" id="how-desktop" hidden><b>ติดตั้งบนคอมพิวเตอร์</b><ol><li>ใช้ Chrome หรือ Edge</li><li>กดไอคอนติดตั้งที่ท้ายช่องที่อยู่เว็บ</li></ol></div>
+  </div>
+
+  <div class="warn" id="nocfg" hidden>ยังไม่ได้ตั้งค่าลิงก์ระบบ เปิดไฟล์ <b>index.html</b> แล้วใส่ลิงก์ในบรรทัด <b>APP_URL</b> (ดูวิธีใน README)</div>
+</main>
+<script>
+/* ===== ตั้งค่า: ใส่ลิงก์ของระบบบน Apps Script (ลิงก์ A ที่เปิดให้ทุกคน) ===== */
+const APP_URL = '';
+const APP_NAME = 'ฟาร์มสัตว์เลี้ยงประจำห้อง';
+const APP_TAGLINE = 'ส่งงาน ทำคะแนน ฟักไข่ แล้วเลี้ยงสัตว์เลี้ยงให้โต';
+/* ================================================================ */
+
+document.getElementById('name').textContent = APP_NAME;
+document.getElementById('tag').textContent = APP_TAGLINE;
+document.title = APP_NAME;
+const $ = id => document.getElementById(id);
+const ua = navigator.userAgent || '';
+const isIOS = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+const isAndroid = /Android/.test(ua);
+const standalone = (window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true;
+const params = new URLSearchParams(location.search);
+
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(function () {});
+
+let deferred = null;
+window.addEventListener('beforeinstallprompt', function (e) {
+  e.preventDefault(); deferred = e; $('install').hidden = false;
+});
+$('install').addEventListener('click', async function () {
+  if (!deferred) return;
+  deferred.prompt();
+  try { await deferred.userChoice; } catch (e) {}
+  deferred = null; $('install').hidden = true;
+});
+window.addEventListener('appinstalled', function () { $('install').hidden = true; });
+
+if (!APP_URL) {
+  $('nocfg').hidden = false; $('menu').hidden = true;
+} else if (standalone || params.get('go') === '1') {
+  // เปิดจากไอคอนบนหน้าจอ: แสดงหน้าโหลดสั้นๆ แล้วไปที่ระบบเลย
+  $('opening').hidden = false;
+  setTimeout(function () { location.replace(APP_URL); }, 700);
+} else {
+  $('menu').hidden = false;
+  $('open').href = APP_URL;
+  if (isIOS) $('how-ios').hidden = false;
+  else if (isAndroid) $('how-android').hidden = false;
+  else $('how-desktop').hidden = false;
+}
+</script>
+</body>
+</html>
